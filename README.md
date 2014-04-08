@@ -14,6 +14,7 @@ http://www.pythonware.com/products/pil/
 
 png_to_jpgpng.py
 ======
+Converting PNG to JPEG with PNG alphachannel mask
 
 How to use
 Just convert
