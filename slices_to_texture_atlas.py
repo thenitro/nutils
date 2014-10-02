@@ -53,12 +53,12 @@ def main(argv):
 
 		counter += 1
 
-		x += input_image.size[0]
+		x += input_image.size[0] + 1
 		maxY = max(maxY, input_image.size[1])
 
 		if (x > atlas_size):
 			x = 0
-			y += maxY
+			y += maxY + 1
 
 			maxY = 0
 
