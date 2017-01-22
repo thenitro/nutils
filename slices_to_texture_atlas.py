@@ -41,6 +41,14 @@ def main(argv):
 
         print(x, y, input_image.size)
 
+        counter += 1
+        max_y = max(max_y, input_image.size[1])
+
+        if x + input_image.size[0] + 1 > atlas_size:
+            x = 0
+            y += max_y + 1
+            max_y = 0
+
         xml.write('<SubTexture name="' + os.path.splitext(input_file)[0] + '" ' +
                   'x="' + str(x) + '" ' +
                   'y="' + str(y) + '" ' +
@@ -49,14 +57,6 @@ def main(argv):
                   'frameX="0" frameY="0" ' +
                   'frameWidth="' + str(input_image.size[0]) + '" ' +
                   'frameHeight="' + str(input_image.size[1]) + '" />')
-
-        counter += 1
-        max_y = max(max_y, input_image.size[1])
-
-        if x + input_image.size[0] + 1 > atlas_size:
-            x = 0
-            y += max_y + 1
-            max_y = 0
 
         output.paste(input_image, (x, y))
 
