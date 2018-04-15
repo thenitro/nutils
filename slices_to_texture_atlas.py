@@ -39,7 +39,7 @@ def main(argv):
     for input_file in file_list:
         input_image = Image.open(input_folder_path + '/' + input_file)
 
-        print(x, y, input_image.size)
+        print(input_file, x, y, input_image.size)
 
         counter += 1
         max_y = max(max_y, input_image.size[1])
@@ -47,7 +47,9 @@ def main(argv):
         if x + input_image.size[0] + 1 > atlas_size:
             x = 0
             y += max_y + 1
-            max_y = 0
+            max_y = input_image.size[1]
+
+        print(max_y)
 
         xml.write('<SubTexture name="' + os.path.splitext(input_file)[0] + '" ' +
                   'x="' + str(x) + '" ' +
