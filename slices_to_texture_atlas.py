@@ -1,7 +1,8 @@
 import sys, getopt, os
 
 from PIL import Image
-
+from operator import mul
+from functools import reduce
 
 def main(argv):
     print('main: ', argv)
@@ -23,6 +24,11 @@ def main(argv):
         elif opt in ("-s", "--size"):
             atlas_size = int(arg)
 
+    try:
+        os.remove(input_folder_path + '/atlas.png')
+    except OSError:
+        pass
+
     file_list = list(get_images(input_folder_path))
     counter = 0
 
@@ -36,10 +42,16 @@ def main(argv):
     xml = open(input_folder_path + '/atlas.xml', 'w')
     xml.write('<TextureAtlas imagePath="atlas.png">')
 
-    for input_file in file_list:
-        input_image = Image.open(input_folder_path + '/' + input_file)
+    input_images = []
 
-        print(input_file, x, y, input_image.size)
+    for input_file in file_list:
+        input_images.append(Image.open(input_folder_path + '/' + input_file))
+
+
+    input_images.sort(key=lambda input_image: reduce(mul, input_image.size), reverse=True)
+
+    for input_image in input_images:
+        print(input_image.filename, x, y, input_image.size)
 
         counter += 1
         max_y = max(max_y, input_image.size[1])
@@ -51,7 +63,7 @@ def main(argv):
 
         print(max_y)
 
-        xml.write('<SubTexture name="' + os.path.splitext(input_file)[0] + '" ' +
+        xml.write('<SubTexture name="' + os.path.splitext(os.path.basename(input_image.filename))[0] + '" ' +
                   'x="' + str(x) + '" ' +
                   'y="' + str(y) + '" ' +
                   'width="' + str(input_image.size[0]) + '" ' +
