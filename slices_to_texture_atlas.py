@@ -51,7 +51,9 @@ def main(argv):
     input_images.sort(key=lambda input_image: reduce(mul, input_image.size), reverse=True)
 
     for input_image in input_images:
-        print(input_image.filename, x, y, input_image.size)
+        file_name = os.path.splitext(os.path.basename(input_image.filename))[0]
+
+        print(file_name, x, y, input_image.size)
 
         counter += 1
         max_y = max(max_y, input_image.size[1])
@@ -63,7 +65,10 @@ def main(argv):
 
         print(max_y)
 
-        xml.write('<SubTexture name="' + os.path.splitext(os.path.basename(input_image.filename))[0] + '" ' +
+        if max_y + y > atlas_size: 
+            print('Warning ' + str(file_name) + ' will be cutted ' + str(max_y + y))
+
+        xml.write('<SubTexture name="' + file_name + '" ' +
                   'x="' + str(x) + '" ' +
                   'y="' + str(y) + '" ' +
                   'width="' + str(input_image.size[0]) + '" ' +
